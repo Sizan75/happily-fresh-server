@@ -38,6 +38,19 @@ try{
         res.send(singleFood)
     })
 
+    app.get('/reviews',async(req,res)=>{
+        let query = {};
+
+        if (req.query.foodId) {
+            query = {
+                foodId: req.query.foodId
+            }
+        }
+        const cursor = reviewCollection.find(query);
+        const foodreview = await cursor.toArray();
+        res.send(foodreview);
+    })
+
     app.post('/reviews', async(req,res)=>{
         const review=req.body
         console.log(review)
