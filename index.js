@@ -31,11 +31,18 @@ try{
         const food= await cursor.toArray();
         res.send(food)
     } )
-    app.get('/foodservice/:id',async(req,res)=>{
+    app.get('/foodservices/:id',async(req,res)=>{
         const id= req.params.id;
         const query={_id:ObjectId(id)}
         const singleFood= await foodCollection.findOne(query)
         res.send(singleFood)
+    })
+
+    app.post('/reviews', async(req,res)=>{
+        const review=req.body
+        console.log(review)
+        const result = await reviewCollection.insertOne(review)
+        res.send(result)
     })
 }
 finally{
