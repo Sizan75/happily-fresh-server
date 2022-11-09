@@ -21,13 +21,15 @@ try{
 
     app.get('/foodservice',async(req,res)=>{
         const query={}
-        const cursor= foodCollection.find(query)
+        sort = {'_id': -1}
+        const cursor= foodCollection.find(query).sort(sort)
         const food= await cursor.limit(3).toArray();
         res.send(food)
     } )
     app.get('/foodservices',async(req,res)=>{
         const query={}
-        const cursor= foodCollection.find(query)
+        sort = {'_id': -1}
+        const cursor= foodCollection.find(query).sort(sort)
         const food= await cursor.toArray();
         res.send(food)
     } )
@@ -46,7 +48,8 @@ try{
                 foodId: req.query.foodId
             }
         }
-        const cursor = reviewCollection.find(query);
+        sort = {'_id': -1}
+        const cursor = reviewCollection.find(query).sort(sort);
         const foodreview = await cursor.toArray();
         res.send(foodreview);
     })
@@ -64,11 +67,32 @@ try{
     })
 
     app.post('/reviews', async(req,res)=>{
-        const review=req.body
-        console.log(review)
+        const review=req.body        
         const result = await reviewCollection.insertOne(review)
         res.send(result)
     })
+
+    app.post('/foodservices', async(req,res)=>{
+        const food=req.body
+        const result = await foodCollection.insertOne(food)
+        res.send(result)
+    })
+
+    app.put('/reviews/:id', async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) };
+        const newrev = req.body;
+        const option = {upsert: true};
+        const updatedreview = {
+            $set: {
+                review: newrev.review,
+                
+            }
+        }
+        const result = await reviewCollection.updateOne(filter, updatedreview, option);
+        res.send(result);
+    })
+
     app.delete('/reviews/:id',async(req,res)=>{
         const id=req.params.id
         const query={_id: ObjectId(id)}
