@@ -50,6 +50,18 @@ try{
         const foodreview = await cursor.toArray();
         res.send(foodreview);
     })
+    app.get('/reviews',async(req,res)=>{
+        let query = {};
+
+        if (req.query.email) {
+            query = {
+                userEmail: req.query.email
+            }
+        }
+        const cursor = reviewCollection.find(query);
+        const myreview = await cursor.toArray();
+        res.send(yreview);
+    })
 
     app.post('/reviews', async(req,res)=>{
         const review=req.body
