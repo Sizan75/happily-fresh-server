@@ -50,17 +50,17 @@ try{
         const foodreview = await cursor.toArray();
         res.send(foodreview);
     })
-    app.get('/reviews',async(req,res)=>{
+    app.get('/myreviews',async(req,res)=>{
         let query = {};
 
-        if (req.query.email) {
+        if (req.query.userEmail) {
             query = {
-                userEmail: req.query.email
+                userEmail: req.query.userEmail
             }
         }
         const cursor = reviewCollection.find(query);
         const myreview = await cursor.toArray();
-        res.send(yreview);
+        res.send(myreview);
     })
 
     app.post('/reviews', async(req,res)=>{
@@ -69,6 +69,12 @@ try{
         const result = await reviewCollection.insertOne(review)
         res.send(result)
     })
+    app.delete('/reviews/:id',async(req,res)=>{
+        const id=req.params.id
+        const query={_id: ObjectId(id)}
+        const result = await reviewCollection.deleteOne(query)
+        res.send(result)
+       }) 
 }
 finally{
 
